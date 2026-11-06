@@ -1,0 +1,94 @@
+{
+    "$schema": "https://raw.githubusercontent.com/k8sdockside/k8sdockside/main/docs/plugin.schema.json",
+    "id": "crossplane",
+    "name": "Crossplane",
+    "version": "1.0.0",
+    "minAppVersion": "0.1.36",
+    "tagline": "The cloud native control plane: packages, APIs, compositions and managed resources, drawn",
+    "icon": "layers",
+    "logo": "logo.svg",
+    "category": "platform",
+    "docs": "https://docs.crossplane.io/latest/",
+    "author": "K8s Dockside",
+    "authorUrl": "https://github.com/k8sdockside",
+    "links": [
+        { "label": "crossplane.io", "url": "https://www.crossplane.io/" },
+        { "label": "Documentation", "url": "https://docs.crossplane.io/latest/" },
+        { "label": "Get started", "url": "https://docs.crossplane.io/latest/get-started/" },
+        { "label": "Marketplace", "url": "https://marketplace.upbound.io/" },
+        { "label": "GitHub", "url": "https://github.com/crossplane/crossplane" },
+        { "label": "Plugin source", "url": "https://github.com/k8sdockside/crossplane" }
+    ],
+    "description": "Crossplane spreads one platform over a dozen kinds: the Providers, Functions and Configurations its package manager installs, each with revisions and dependencies; the APIs you define with CompositeResourceDefinitions; the Compositions and function pipelines behind them; and the hundreds of managed resource kinds each provider brings. Crossplane has no screen of its own. This plugin is one.\n\nThe Dashboard says in one sentence whether the control plane is healthy, then draws it: package health, API state, the managed resource kinds per provider, what happened in the last hour and what needs attention. Packages draws the dependency graph the package manager resolved, with every revision. Compositions draws each API, the Compositions that serve it and the function pipeline each one runs. Managed resources maps every managed resource kind by provider, which are active, and which are failing. Activity is the timeline of what Crossplane did and what went wrong. Problems says what is wrong in plain words and what to change.\n\nIt only reads; it changes nothing in the cluster.",
+
+    "requires": [
+        { "kind": "crd:providers.pkg.crossplane.io", "label": "Providers" },
+        { "kind": "crd:compositeresourcedefinitions.apiextensions.crossplane.io", "label": "Composite resource definitions" },
+        { "kind": "crd:compositions.apiextensions.crossplane.io", "label": "Compositions" },
+        { "kind": "crd:functions.pkg.crossplane.io", "label": "Functions", "optional": true },
+        { "kind": "crd:configurations.pkg.crossplane.io", "label": "Configurations", "optional": true },
+        { "kind": "crd:providerrevisions.pkg.crossplane.io", "label": "Provider revisions", "optional": true },
+        { "kind": "crd:functionrevisions.pkg.crossplane.io", "label": "Function revisions", "optional": true },
+        { "kind": "crd:configurationrevisions.pkg.crossplane.io", "label": "Configuration revisions", "optional": true },
+        { "kind": "crd:locks.pkg.crossplane.io", "label": "Package lock", "optional": true },
+        { "kind": "crd:deploymentruntimeconfigs.pkg.crossplane.io", "label": "Runtime configs", "optional": true },
+        { "kind": "crd:imageconfigs.pkg.crossplane.io", "label": "Image configs", "optional": true },
+        { "kind": "crd:compositionrevisions.apiextensions.crossplane.io", "label": "Composition revisions", "optional": true },
+        { "kind": "crd:environmentconfigs.apiextensions.crossplane.io", "label": "Environment configs", "optional": true },
+        { "kind": "crd:managedresourcedefinitions.apiextensions.crossplane.io", "label": "Managed resource definitions", "optional": true },
+        { "kind": "crd:managedresourceactivationpolicies.apiextensions.crossplane.io", "label": "Activation policies", "optional": true },
+        { "kind": "crd:operations.ops.crossplane.io", "label": "Operations", "optional": true },
+        { "kind": "crd:cronoperations.ops.crossplane.io", "label": "Cron operations", "optional": true },
+        { "kind": "crd:watchoperations.ops.crossplane.io", "label": "Watch operations", "optional": true },
+        { "kind": "crd:usages.protection.crossplane.io", "label": "Usages", "optional": true },
+        { "kind": "crd:clusterusages.protection.crossplane.io", "label": "Cluster usages", "optional": true }
+    ],
+
+    "overview": { "entry": "overview.html" },
+
+    "views": [
+        { "id": "packages", "label": "Packages", "icon": "box", "type": "custom", "entry": "packages.html" },
+        { "id": "compositions", "label": "Compositions", "icon": "graph", "type": "custom", "entry": "compositions.html" },
+        { "id": "managed", "label": "Managed resources", "icon": "layers", "type": "custom", "entry": "managed.html" },
+        { "id": "activity", "label": "Activity", "icon": "history", "type": "custom", "entry": "activity.html" },
+        { "id": "problems", "label": "Problems", "icon": "alert", "type": "custom", "entry": "problems.html" },
+        { "id": "providers", "label": "Providers", "icon": "puzzle", "kind": "crd:providers.pkg.crossplane.io" },
+        { "id": "functions", "label": "Functions", "icon": "sliders", "kind": "crd:functions.pkg.crossplane.io" },
+        { "id": "xrds", "label": "Composite resource definitions", "icon": "type", "kind": "crd:compositeresourcedefinitions.apiextensions.crossplane.io" },
+        { "id": "compositions-table", "label": "Composition list", "icon": "rows", "kind": "crd:compositions.apiextensions.crossplane.io" }
+    ],
+
+    "cards": [
+        {
+            "label": "Providers healthy",
+            "kind": "crd:providers.pkg.crossplane.io",
+            "groupBy": "status.conditions[Healthy]",
+            "tones": { "True": "ok", "False": "error", "Unknown": "warn" }
+        },
+        {
+            "label": "Functions healthy",
+            "kind": "crd:functions.pkg.crossplane.io",
+            "groupBy": "status.conditions[Healthy]",
+            "tones": { "True": "ok", "False": "error", "Unknown": "warn" }
+        },
+        {
+            "label": "APIs established",
+            "kind": "crd:compositeresourcedefinitions.apiextensions.crossplane.io",
+            "groupBy": "status.conditions[Established]",
+            "tones": { "True": "ok", "False": "error", "Unknown": "warn" }
+        }
+    ],
+
+    "sections": [
+        { "id": "provider-package", "label": "Package", "kind": "crd:providers.pkg.crossplane.io", "entry": "package.html", "height": 360 },
+        { "id": "function-package", "label": "Package", "kind": "crd:functions.pkg.crossplane.io", "entry": "package.html", "height": 300 },
+        { "id": "configuration-package", "label": "Package", "kind": "crd:configurations.pkg.crossplane.io", "entry": "package.html", "height": 300 },
+        { "id": "xrd-api", "label": "Compositions for this API", "kind": "crd:compositeresourcedefinitions.apiextensions.crossplane.io", "entry": "api.html", "height": 320 },
+        { "id": "composition-pipeline", "label": "Pipeline", "kind": "crd:compositions.apiextensions.crossplane.io", "entry": "api.html", "height": 260 }
+    ],
+
+    "ui": {
+        "kinds": ["customresourcedefinitions", "events", "pods"],
+        "write": false
+    }
+}
